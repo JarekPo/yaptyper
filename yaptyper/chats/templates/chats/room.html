@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Room</title>
+    <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const roomName = "{{ room_name }}";
+            const socket = io('ws://127.0.0.1:8000', {
+                transports: ['websocket'],
+                upgrade: false
+            });
+
+            socket.on('connect', function() {
+                console.log('Connected to server');
+                socket.emit('join', { room: roomName });
+            });
+
+            socket.on('message', function(data) {
+                console.log('Received message:', data);
+                const chatLog = document.getElementById('chat-log');
+                chatLog.value += data.message + '\n';
+            });
+
+            socket.on('connect_error', function(error) {
+                console.error('Connection error:', error);
+            });
+
+            document.getElementById('chat-message-submit').onclick = function() {
+                const messageInput = document.getElementById('chat-message-input');
+                const message = messageInput.value;
+                socket.emit('message', { room: roomName, message: message });
+                messageInput.value = '';
+            };
+        });
+    </script>
+</head>
+<body>
+    <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>
+    <input id="chat-message-input" type="text" size="100"><br>
+    <input id="chat-message-submit" type="button" value="Send">
+</body>
+</html>
