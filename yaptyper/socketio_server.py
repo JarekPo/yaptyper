@@ -20,13 +20,21 @@ def connect(sid, environ):
 @sio.event
 def disconnect(sid):
     print("disconnect ", sid)
+    rooms = sio.rooms(sid)
+    for room in rooms:
+        sio.leave_room(sid, room)
+        sio.emit(
+            "message", {"message": f"{sid} has left the room."}, room=room, skip_sid=sid
+        )
 
 
 @sio.on("join")
 def join(sid, data):
     room = data["room"]
     sio.enter_room(sid, room)
-    sio.emit("message", {"message": f"{sid} has entered the room."}, room=room)
+    sio.emit(
+        "message", {"message": f"{sid} has entered the room."}, room=room, skip_sid=sid
+    )
 
 
 @sio.on("message")

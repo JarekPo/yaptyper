@@ -19,10 +19,12 @@ from django.contrib import admin
 from django.urls import include, path
 
 from chats.consumers import websocket_app
+from .views import home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("chats/", include("chats.urls")),
+    path("", home),
 ]
 
 websocket_patterns = [path("socket.io/", websocket_app)]

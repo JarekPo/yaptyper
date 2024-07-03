@@ -4,33 +4,37 @@
     <title>Chat Room</title>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
+        document.addEventListener('DOMContentLoaded', () => {
             const roomName = "{{ room_name }}";
-            const socket = io('ws://127.0.0.1:8000', {
+            const socket = io.connect('http://localhost:8000', {
                 transports: ['websocket'],
                 upgrade: false
             });
 
-            socket.on('connect', function() {
+            socket.on('connect', () => {
                 console.log('Connected to server');
                 socket.emit('join', { room: roomName });
             });
 
-            socket.on('message', function(data) {
+            socket.on('message', (data) => {
                 console.log('Received message:', data);
                 const chatLog = document.getElementById('chat-log');
                 chatLog.value += data.message + '\n';
             });
 
-            socket.on('connect_error', function(error) {
+            socket.on('connect_error', (error) => {
                 console.error('Connection error:', error);
             });
 
-            document.getElementById('chat-message-submit').onclick = function() {
+            document.getElementById('chat-message-submit').onclick = () => {
                 const messageInput = document.getElementById('chat-message-input');
                 const message = messageInput.value;
                 socket.emit('message', { room: roomName, message: message });
                 messageInput.value = '';
+            };
+
+            document.getElementById('leave-room').onclick = () => {
+                socket.emit('leave', { room: roomName });
             };
         });
     </script>
@@ -39,5 +43,6 @@
     <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>
     <input id="chat-message-input" type="text" size="100"><br>
     <input id="chat-message-submit" type="button" value="Send">
+    <input id="leave-room" type="button" value="Leave Room">
 </body>
 </html>
