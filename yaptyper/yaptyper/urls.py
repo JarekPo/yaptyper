@@ -17,14 +17,20 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import include, path
+from django.conf.urls.static import static
 
 from chats.consumers import websocket_app
+from yaptyper import settings
 from .views import home
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("chats/", include("chats.urls")),
     path("", home),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 websocket_patterns = [path("socket.io/", websocket_app)]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
