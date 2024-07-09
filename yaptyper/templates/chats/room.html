@@ -1,7 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Chat Room</title>
+{% extends 'base.html' %}
+{% block title %}
+    <title>Chat Room {{ room_name }}</title>
+{% endblock %}
+
+{% block scripts %} 
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -38,11 +40,11 @@
             };
         });
     </script>
-</head>
-<body>
-    <textarea id="chat-log" cols="100" rows="20" readonly></textarea><br>
+{% endblock %}
+
+{% block content %}
+    <textarea class='bg-green-800' id="chat-log" cols="100" rows="20" readonly></textarea><br>
     <input id="chat-message-input" type="text" size="100"><br>
-    <input id="chat-message-submit" type="button" value="Send">
+    <input class='bg-green-800' id="chat-message-submit" type="button" value="Send">
     <input id="leave-room" type="button" value="Leave Room">
-</body>
-</html>
+{% endblock %}
