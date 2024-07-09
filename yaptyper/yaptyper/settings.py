@@ -133,11 +133,14 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "yaptyper/theme/static"
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "yaptyper/theme/static",
 ]
 STATIC_ROOT = BASE_DIR / "staticfiles"
+
+TAILWIND_APP_NAME = "theme"
+TAILWIND_CSS_PATH = "css/dist/styles.css"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -147,8 +150,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
 ]
-
-TAILWIND_APP_NAME = "theme"
 
 INTERNAL_IPS = [
     "127.0.0.1",
