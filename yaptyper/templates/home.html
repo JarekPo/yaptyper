@@ -1,11 +1,34 @@
 {% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    <title>YapTyper</title>
+{% endblock %}
 
+{% block scripts %}
+  <script src="{% static 'js/chats/main.js' %}"></script>
+{% endblock %}
 {% block content %}
-  <div class="container mx-auto">
-    <section class="flex items-center justify-around h-screen">
-      <h4 class="text-5xl">Enter your name: </h4><br>
-      <input type="text" class="h-12 w-full px-4 py-3 text-lg text-yellow-700 border border-red-900 rounded focus:outline-none focus:border-pink-500" onchange="console.log('this.value', this.value)">
-      <button class="bg-pink-700" onclick='alert("clicked")'>Enter</button>
-    </section>	
+  <div id="enter-name-section" class="container mx-auto" style="display: none">
+    <section class="flex flex-col content-center items-center justify-center h-screen">
+      <h4 class="text-xl my-3">Name</h4>
+      <input id="username-input" type="text" class="h-12 px-4 py-5 text-lg text-gray-700 rounded focus:outline-none">
+      <a href="/chats/room1/"><button class="text-xl bg-orange-500 hover:bg-orange-700 my-8 py-2 px-4 border border-white rounded" onclick="getUsername()">Enter</button></a>
+    </section>
   </div>
+  <div id="enter-chat-section" class="container mx-auto" style="display: none">
+    <section class="flex flex-col content-center items-center justify-center h-screen">
+      <div>Welcome back <span id="username-display" class="text-orange-500">user</span></div>
+      <a href="/chats/room1/"><button class="text-xl bg-orange-500 hover:bg-orange-700 my-8 py-2 px-4 border border-white rounded" onclick="getUsername()">Enter</button></a>
+    </section>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (isUserInLocalStorage()) {
+            document.getElementById("enter-chat-section").style.display = "block";
+            document.getElementById("username-display").innerText = localStorage.getItem("username");
+        } else {
+            document.getElementById("enter-name-section").style.display = "block";
+        }
+    });
+  </script>
 {% endblock %}
