@@ -10,6 +10,7 @@ import eventlet
 from django.core.wsgi import get_wsgi_application
 
 sio = socketio.Server(async_mode="eventlet")
+usernames = {}
 
 
 @sio.event
@@ -20,27 +21,36 @@ def connect(sid, environ):
 @sio.event
 def disconnect(sid):
     print("disconnect ", sid)
+    username = usernames.pop(sid, "Unknown user")
     rooms = sio.rooms(sid)
     for room in rooms:
         sio.leave_room(sid, room)
         sio.emit(
-            "message", {"message": f"{sid} has left the room."}, room=room, skip_sid=sid
+            "message",
+            {"message": f"{username} has left the room."},
+            room=room,
+            skip_sid=sid,
         )
 
 
 @sio.on("join")
 def join(sid, data):
     room = data["room"]
+    username = "USER 1"
     sio.enter_room(sid, room)
     sio.emit(
-        "message", {"message": f"{sid} has entered the room."}, room=room, skip_sid=sid
+        "message",
+        {"message": f"{username} has entered the room."},
+        room=room,
+        skip_sid=sid,
     )
 
 
 @sio.on("message")
 def message(sid, data):
     room = data["room"]
-    sio.emit("message", {"message": data["message"]}, room=room)
+    username = usernames.get(sid, "Unknown user")
+    sio.emit("message", {"message": f"{username}: {data['message']}"}, room=room)
 
 
 django_app = get_wsgi_application()

@@ -5,48 +5,20 @@
 {% endblock %}
 
 {% block scripts %}
-    <script src="{% static 'js/chats/main.js' %}"></script>
     <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const roomName = "{{ room_name }}";
-            const socket = io.connect('http://localhost:8000', {
-                transports: ['websocket'],
-                upgrade: false
-            });
-
-            socket.on('connect', () => {
-                console.log('Connected to server');
-                socket.emit('join', { room: roomName });
-            });
-
-            socket.on('message', (data) => {
-                console.log('Received message:', data);
-                const chatLog = document.getElementById('chat-log');
-                chatLog.value += data.message + '\n';
-            });
-
-            socket.on('connect_error', (error) => {
-                console.error('Connection error:', error);
-            });
-
-            document.getElementById('chat-message-submit').onclick = () => {
-                const messageInput = document.getElementById('chat-message-input');
-                const message = messageInput.value;
-                socket.emit('message', { room: roomName, message: message });
-                messageInput.value = '';
-            };
-
-            document.getElementById('leave-room').onclick = () => {
-                socket.emit('leave', { room: roomName });
-            };
-        });
-    </script>
+    <script src="{% static 'js/chats/room.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-    <textarea class='bg-green-800' id="chat-log" cols="100" rows="20" readonly></textarea><br>
-    <input id="chat-message-input" type="text" size="100"><br>
-    <input class='bg-green-800' id="chat-message-submit" type="button" value="Send">
-    <input id="leave-room" type="button" value="Leave Room">
+    <section class="flex flex-col content-center items-center justify-center h-screen">
+        <textarea class='text-gray-700 bg-white resize-none break-normal' id="chat-log" cols="40" rows="20" readonly></textarea>
+        <div>
+            <input class='text-gray-700 bg-white my-5' placeholder="Type Message..." id="chat-message-input" type="text" size="30">
+            <button id="chat-message-submit" class="text-sm bg-orange-600 hover:bg-orange-400 my-8 py-1.5 px-4 border border-white rounded">Send</button>
+        </div>
+
+        <a href="../../">
+            <button id="leave-room" class="text-sm bg-gray-500 hover:bg-orange-400 my-8 py-1 px-4 border border-white rounded" style="overscroll-behavior: contain">Leave Room</button>
+        </a>
+    </section>
 {% endblock %}
