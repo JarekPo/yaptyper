@@ -21,13 +21,16 @@ from django.conf.urls.static import static
 
 from chats.consumers import websocket_app
 from yaptyper import settings
-from .views import home
+from .views import home, LoginView, LogoutView, RegisterView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("chats/", include("chats.urls")),
     path("", home),
     path("__reload__/", include("django_browser_reload.urls")),
+    path("login/", LoginView.as_view(), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
+    path("register/", RegisterView.as_view(), name="register"),
 ]
 
 websocket_patterns = [path("socket.io/", websocket_app)]

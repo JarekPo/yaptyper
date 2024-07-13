@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const roomName = "{{ room_name }}";
-    // const username = localStorage.getItem("username");
-    const username = 'USER 12';
+    const roomName = window.roomName;
+    const username = window.username;
     const socket = io.connect('http://localhost:8000', {
         transports: ['websocket'],
         upgrade: false
@@ -11,13 +10,14 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('Connected to server');
         const chatLog = document.getElementById('chat-log');
         chatLog.value += `${username} joined the room \n`;
-        socket.emit('join', { room: roomName });
+        socket.emit('join', { room: roomName, username: username });
     });
 
     socket.on('message', (data) => {
         console.log('Received message:', data);
         const chatLog = document.getElementById('chat-log');
         chatLog.value += `${username}: ${data.message} \n`;
+        chatLog.scrollTop = chatLog.scrollHeight;
     });
 
     socket.on('connect_error', (error) => {
@@ -27,16 +27,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('chat-message-submit').onclick = () => {
         const messageInput = document.getElementById('chat-message-input');
         const message = messageInput.value;
-        socket.emit('message', { room: roomName, message: message });
+        socket.emit('message', { room: roomName, message: message, username: username });
         messageInput.value = '';
     };
 
     document.getElementById('chat-message-input').addEventListener("keyup", (event) => {
         if (event.key === "Enter") {
-          event.preventDefault();
-          document.getElementById("chat-message-submit").click();
+            event.preventDefault();
+            document.getElementById("chat-message-submit").click();
         }
-      });
+    });
 
     document.getElementById('leave-room').onclick = () => {
         socket.emit('leave', { room: roomName });
