@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 from .forms import ChatRoomForm, JoinRoomForm
@@ -54,6 +54,7 @@ def join_chatroom(request):
 
 @login_required
 def chat_room(request, room_name):
+    chat = get_object_or_404(Chat, room_name=room_name)
     username = request.user.username
     return render(
         request, "chats/room.html", {"room_name": room_name, "username": username}
