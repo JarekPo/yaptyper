@@ -27,7 +27,7 @@ def disconnect(sid):
         sio.leave_room(sid, room)
         sio.emit(
             "message",
-            {"message": f"{username} has left the room."},
+            {"username": "INFO", "message": f"{username} has left the room."},
             room=room,
             skip_sid=sid,
         )
@@ -36,11 +36,12 @@ def disconnect(sid):
 @sio.on("join")
 def join(sid, data):
     room = data["room"]
-    username = "USER 1"
+    username = data["username"]
+    usernames[sid] = username
     sio.enter_room(sid, room)
     sio.emit(
         "message",
-        {"message": f"{username} has entered the room."},
+        {"username": "INFO", "message": f"{username} has entered the room."},
         room=room,
         skip_sid=sid,
     )
@@ -50,7 +51,20 @@ def join(sid, data):
 def message(sid, data):
     room = data["room"]
     username = usernames.get(sid, "Unknown user")
-    sio.emit("message", {"message": f"{username}: {data['message']}"}, room=room)
+    sio.emit("message", {"username": username, "message": data["message"]}, room=room)
+
+
+@sio.on("leave")
+def leave(sid, data):
+    room = data["room"]
+    username = data["username"]
+    sio.leave_room(sid, room)
+    sio.emit(
+        "message",
+        {"username": "INFO", "message": f"{username} has left the room."},
+        room=room,
+        skip_sid=sid,
+    )
 
 
 django_app = get_wsgi_application()
