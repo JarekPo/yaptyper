@@ -1,6 +1,7 @@
 import os
 import django
 from django.conf import settings
+from django.contrib.auth.hashers import check_password
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yaptyper.settings")
 django.setup()
@@ -50,10 +51,31 @@ def disconnect(sid):
 def join(sid, data):
     room_name = data["room"]
     username = data["username"]
+    password = data.get("password", "")
+
+    try:
+        chat = Chat.objects.get(room_name=room_name)
+        if chat.password and not check_password(password, chat.password):
+            sio.emit(
+                "message",
+                {
+                    "username": "INFO",
+                    "message": "Incorrect password.",
+                    "color": "#FF0000",
+                },
+                room=sid,
+            )
+            return
+    except Chat.DoesNotExist:
+        sio.emit(
+            "message",
+            {"username": "INFO", "message": "Room does not exist.", "color": "#FF0000"},
+            room=sid,
+        )
+        return
+
     usernames[sid] = username
     user_colors[sid] = generate_random_color()
-
-    chat, created = Chat.objects.get_or_create(room_name=room_name)
 
     previous_messages = chat.get_messages()
     for message in previous_messages:

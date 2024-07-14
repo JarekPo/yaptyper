@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const roomName = window.roomName;
     const username = window.username;
+    const password = window.roomPassword || "";
+
     const socket = io.connect('http://localhost:8000', {
         transports: ['websocket'],
         upgrade: false
@@ -8,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('connect', () => {
         console.log('Connected to server');
-        socket.emit('join', { room: roomName, username: username });
+        socket.emit('join', { room: roomName, username: username, password: password });
     });
 
     socket.on('message', (data) => {
