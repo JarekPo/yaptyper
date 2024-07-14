@@ -14,6 +14,12 @@
     <div>Hi <span id="username-display" class="text-orange-500">{{ user.username }}</span></div>
     <a href="/chats/room1/"><button
         class="text-xl bg-orange-600 hover:bg-orange-400 my-8 py-2 px-4 border border-white rounded">Enter</button></a>
+    <form action="{% url 'logout' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" id="logout"
+        class="text-xs text-white bg-gray-500 hover:bg-orange-400 mt-20 py-1 px-4 border border-white rounded"
+        style="overscroll-behavior: contain">Log Out</button>
+    </form>
   </div>
   {% else %}
   <div id="auth-section" class="flex flex-col content-center items-center justify-center h-screen">

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     socket.on('message', (data) => {
         console.log('Received message:', data);
         const chatLog = document.getElementById('chat-log');
-        chatLog.value += `${username}: ${data.message} \n`;
+        chatLog.value += `${data.username}: ${data.message} \n`;
         chatLog.scrollTop = chatLog.scrollHeight;
     });
 
@@ -39,6 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('leave-room').onclick = () => {
-        socket.emit('leave', { room: roomName });
+        socket.emit('leave', { room: roomName, username: username });
     };
 });

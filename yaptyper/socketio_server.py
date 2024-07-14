@@ -27,7 +27,7 @@ def disconnect(sid):
         sio.leave_room(sid, room)
         sio.emit(
             "message",
-            {"username": "Server", "message": f"{username} has left the room."},
+            {"username": "INFO", "message": f"{username} has left the room."},
             room=room,
             skip_sid=sid,
         )
@@ -41,7 +41,7 @@ def join(sid, data):
     sio.enter_room(sid, room)
     sio.emit(
         "message",
-        {"username": "Server", "message": f"{username} has entered the room."},
+        {"username": "INFO", "message": f"{username} has entered the room."},
         room=room,
         skip_sid=sid,
     )
@@ -61,7 +61,7 @@ def leave(sid, data):
     sio.leave_room(sid, room)
     sio.emit(
         "message",
-        {"username": "Server", "message": f"{username} has left the room."},
+        {"username": "INFO", "message": f"{username} has left the room."},
         room=room,
         skip_sid=sid,
     )
