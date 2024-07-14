@@ -8,15 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.on('connect', () => {
         console.log('Connected to server');
-        const chatLog = document.getElementById('chat-log');
-        chatLog.value += `${username} joined the room \n`;
         socket.emit('join', { room: roomName, username: username });
     });
 
     socket.on('message', (data) => {
         console.log('Received message:', data);
         const chatLog = document.getElementById('chat-log');
-        chatLog.value += `${data.username}: ${data.message} \n`;
+        const newMessage = document.createElement("p");
+        newMessage.style.color = data.color;
+        newMessage.textContent = `${data.username}: ${data.message}`;
+        chatLog.appendChild(newMessage);
         chatLog.scrollTop = chatLog.scrollHeight;
     });
 
