@@ -1,0 +1,16 @@
+{% load static %}
+<nav class="bg-orange-500 shadow-md">
+  <div class="container mx-auto px-6 py-3 flex justify-between items-center">
+    <div>
+      <a href="{% url 'home' %}" class="flex items-center">
+        <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-10 w-14">
+        <span class="ml-2 text-xl font-bold ">YapTyper</span>
+      </a>
+    </div>
+    <div class="flex space-x-4">
+      <a href="{% url 'home' %}" class=" hover:underline font-bold">Home</a>
+      <p>|</p>
+      <a href="{% url 'home' %}" class=" hover:underline font-bold">About</a>
+    </div>
+  </div>
+</nav>
