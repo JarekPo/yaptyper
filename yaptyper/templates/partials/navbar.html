@@ -1,16 +1,21 @@
 {% load static %}
-<nav class="bg-orange-500 shadow-md">
+<nav class="text-sm bg-orange-500 shadow-md">
   <div class="container mx-auto px-6 py-3 flex justify-between items-center">
     <div>
       <a href="{% url 'home' %}" class="flex items-center">
         <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-10 w-14">
-        <span class="ml-2 text-xl font-bold ">YapTyper</span>
+        <span class="ml-2 font-bold text-xl">YapTyper</span>
       </a>
     </div>
-    <div class="flex space-x-4">
-      <a href="{% url 'home' %}" class=" hover:underline font-bold">Home</a>
-      <p>|</p>
-      <a href="{% url 'home' %}" class=" hover:underline font-bold">About</a>
+    <div class="flex space-x-4 sm:text-sm md:text-lg">
+      <a href="{% url 'home' %}" class="hover:underline font-bold hidden min-[490px]:block">Home</a>
+      <p class="hidden min-[490px]:block">|</p>
+      <a href="{% url 'my_chats' %}" class="hover:underline font-bold">My Chats</a>
+      <p class="hidden min-[420px]:block">|</p>
+      <form action="{% url 'logout' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" id="logout" class="hover:underline font-bold hidden min-[420px]:block">Log Out</button>
+      </form>
     </div>
   </div>
 </nav>
