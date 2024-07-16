@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}
+<title>My Chatrooms</title>
+{% endblock %}
+
+{% block content %}
+<section class="flex flex-col content-center items-center text-orange-500 justify-center h-screen">
+    <div class="max-w-3xl">
+        <h2 class="text-2xl font-bold mb-4">My Chats</h2>
+        <ul class="px-8 pt-6 pb-8 mb-4">
+            {% for chatroom in chatrooms %}
+            <li class="mb-2">
+                <a href="{% url 'chat_room' chatroom.room_name %}" class="text-white hover:underline uppercase">
+                    {{ chatroom.room_name }}
+                </a>
+            </li>
+            {% empty %}
+            <li class="text-white">You have not created any chatrooms yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <a href="{% url 'create_chatroom' %}">
+        <button
+            class="text-lg text-white bg-orange-600 hover:bg-orange-400 my-6 py-2 px-4 border border-white rounded">Create
+            New
+            Chat</button>
+    </a>
+</section>
+{% endblock %}

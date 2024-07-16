@@ -18,11 +18,13 @@ def room(request, room_name):
     )
 
 
+@login_required
 def create_chatroom(request):
     if request.method == "POST":
         form = ChatRoomForm(request.POST)
         if form.is_valid():
             chat = form.save(commit=False)
+            chat.created_by = request.user
             if chat.password:
                 chat.password = make_password(chat.password)
             chat.save()
@@ -59,3 +61,9 @@ def chat_room(request, room_name):
     return render(
         request, "chats/room.html", {"room_name": room_name, "username": username}
     )
+
+
+@login_required
+def my_chats(request):
+    chatrooms = Chat.objects.filter(created_by=request.user)
+    return render(request, "chats/my_chats.html", {"chatrooms": chatrooms})
