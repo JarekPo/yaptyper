@@ -8,27 +8,27 @@
 <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
 <script src="{% static 'js/chats/room.js' %}"></script>
 <script>
-    window.roomName = "{{ room_name }}";
-    window.username = "{{ username }}";
-    window.roomPassword = "{{ room_password }}";
+  window.roomName = "{{ room_name }}";
+  window.username = "{{ username }}";
+  window.roomPassword = "{{ room_password }}";
 </script>
 {% endblock %}
 
 {% block content %}
 <section class="flex flex-col content-center items-center justify-center h-screen">
-    <div id="chat-log" class='text-gray-700 bg-white resize-none break-normal'
-        style="width: 22rem; height: 22rem; overflow-y: auto; border: 1px solid #ccc; padding: 1rem;"></div>
-    <div>
-        <input class='text-gray-700 bg-white my-5' placeholder="Type Message..." id="chat-message-input" type="text"
-            size="30">
-        <button id="chat-message-submit"
-            class="text-sm bg-orange-600 hover:bg-orange-400 my-8 py-1.5 px-4 border border-white rounded">Send</button>
-    </div>
+  <div>Chat Name: <span id="chat-name-display" class="text-orange-500 font-bold uppercase">{{ room_name }}</span></div>
+  <div id="chat-log" class='text-gray-700 bg-white resize-none break-normal mt-2'
+    style="width: 22rem; height: 22rem; overflow-y: auto; border: 1px solid #ccc; padding: 1rem;"></div>
+  <div>
+    <input class='text-gray-700 bg-white my-5' placeholder="Type Message..." id="chat-message-input" type="text"
+      size="30">
+    <button id="chat-message-submit"
+      class="text-sm bg-orange-600 hover:bg-orange-400 my-8 py-1.5 px-4 border border-white rounded">Send</button>
+  </div>
 
-    <a href="../../">
-        <button id="leave-room"
-            class="text-sm bg-gray-500 hover:bg-orange-400 my-8 py-1 px-4 border border-white rounded"
-            style="overscroll-behavior: contain">Leave Room</button>
-    </a>
+  <a href="../../">
+    <button id="leave-room" class="text-sm bg-gray-500 hover:bg-orange-400 my-8 py-1 px-4 border border-white rounded"
+      style="overscroll-behavior: contain">Leave Room</button>
+  </a>
 </section>
 {% endblock %}
