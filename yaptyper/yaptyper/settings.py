@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     "chats",
     "chat_messages",
     "corsheaders",
-    "tailwind",
+    # "tailwind",
     "theme",
     "django_browser_reload",
 ]
