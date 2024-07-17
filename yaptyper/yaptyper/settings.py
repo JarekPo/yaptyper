@@ -29,7 +29,7 @@ SECRET_KEY = "django-insecure-2g22*5*u)p^n5nb=%k^bct30(3tl+bhz4l&*87c852al6#3o=o
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['.vercel.app']
+ALLOWED_HOSTS = ["yaptyper.vercel.app", "localhost"]
 
 
 # Application definition
@@ -89,7 +89,20 @@ LOGOUT_REDIRECT_URL = "/"
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# dev
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": env("DATABASE_NAME"),
+#         "USER": env("DATABASE_USER"),
+#         "PASSWORD": env("DATABASE_PASSWORD"),
+#         "HOST": env("DATABASE_HOST"),
+#         "PORT": env("DATABASE_PORT"),
+#     }
+# }
 
+
+# prod
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -97,7 +110,10 @@ DATABASES = {
         "USER": env("DATABASE_USER"),
         "PASSWORD": env("DATABASE_PASSWORD"),
         "HOST": env("DATABASE_HOST"),
-        "PORT": env("DATABASE_PORT"),
+        "PORT": "",
+        "OPTIONS": {
+            "sslmode": "require",
+        },
     }
 }
 
@@ -150,9 +166,7 @@ TAILWIND_CSS_PATH = "css/dist/styles.css"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-]
+CORS_ALLOWED_ORIGINS = ["http://localhost:8000", "https://yaptyper.vercel.app"]
 
 INTERNAL_IPS = [
     "127.0.0.1",
