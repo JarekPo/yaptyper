@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
     "yaptyper.vercel.app",
     "localhost",
     "yaptyper-7xreprclo-jarekp1admins-projects.vercel.app",
+    "yaptyper*.vercel.app",
 ]
 
 
