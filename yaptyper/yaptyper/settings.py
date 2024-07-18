@@ -29,7 +29,11 @@ SECRET_KEY = env("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["yaptyper.vercel.app", "localhost"]
+ALLOWED_HOSTS = [
+    "yaptyper.vercel.app",
+    "localhost",
+    "https://yaptyper-7xreprclo-jarekp1admins-projects.vercel.app",
+]
 
 
 # Application definition
@@ -166,7 +170,11 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:8000", "https://yaptyper.vercel.app"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8000",
+    "https://yaptyper.vercel.app",
+    "https://yaptyper-7xreprclo-jarekp1admins-projects.vercel.app",
+]
 
 INTERNAL_IPS = [
     "127.0.0.1",
