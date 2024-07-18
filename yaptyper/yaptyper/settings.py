@@ -27,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "yaptyper.vercel.app",
     "localhost",
-    "https://yaptyper-7xreprclo-jarekp1admins-projects.vercel.app",
+    "yaptyper-7xreprclo-jarekp1admins-projects.vercel.app",
 ]
 
 
