@@ -10,6 +10,10 @@
   "buildCommand": "pip install -r requirements.txt && python manage.py collectstatic --noinput",
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/staticfiles/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "yaptyper/wsgi.py"
     }
