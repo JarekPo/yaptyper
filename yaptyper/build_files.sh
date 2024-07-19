@@ -1,5 +1,5 @@
 #!/bin/bash
 
-pip install -r requirements.txt
+$(which pip) install -r requirements.txt
 
-python manage.py collectstatic --noinput
+$(which python) manage.py collectstatic --noinput
