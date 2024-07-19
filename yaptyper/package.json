@@ -3,11 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tailwindcss build theme/static/css/src/styles.css -o theme/static/css/dist/styles.css"
-  },
-  "devDependencies": {
-    "tailwindcss": "^2.2.19",
-    "autoprefixer": "^10.4.0",
-    "postcss": "^8.4.5"
+    "vercel-build": "pip install -r requirements.txt && python manage.py collectstatic --noinput"
   }
 }
