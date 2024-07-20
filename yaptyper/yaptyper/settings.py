@@ -184,6 +184,6 @@ INTERNAL_IPS = [
 NPM_BIN_PATH = env("NPM_BIN_PATH")
 
 
-def js_mime_type(response):
-    response["Content-Type"] = "text/javascript"
-    return response
+# def js_mime_type(response):
+#     response["Content-Type"] = "text/javascript"
+#     return response
