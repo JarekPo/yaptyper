@@ -7,8 +7,7 @@
       "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
     },
     {
-      "src": "/staticfiles/*",
-      "dest": "/public/",
+      "src": "/static/*",
       "command": "cp -r /staticfiles/* /public/"
     }
   ],
@@ -29,6 +28,12 @@
         "Access-Control-Allow-Origin": "*",
         "Content-Type": "application/javascript; charset=utf-8"
       }
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/staticfiles/*",
+      "destination": "/public/"
     }
   ]
 }
