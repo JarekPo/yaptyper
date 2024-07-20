@@ -19,8 +19,5 @@
       "src": "/(.*)",
       "dest": "yaptyper/wsgi.py"
     }
-  ],
-  "mimeTypes": {
-    ".css": "text/css"
-  }
+  ]
 }
