@@ -24,11 +24,5 @@
       "src": "/(.*)",
       "dest": "yaptyper/wsgi.py"
     }
-  ],
-  "rewrites": [
-    {
-      "source": "/staticfiles/*",
-      "destination": "/public/"
-    }
   ]
 }
