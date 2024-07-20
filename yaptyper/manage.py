@@ -1,22 +1,142 @@
-#!/usr/bin/env python
-"""Django's command-line utility for administrative tasks."""
 import os
-import sys
+import django
+from django.conf import settings
+from django.contrib.auth.hashers import check_password
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yaptyper.settings")
+django.setup()
+
+import socketio
+import eventlet
+from django.core.wsgi import get_wsgi_application
+from chats.models import Chat
+from chat_messages.models import ChatMessage
+
+sio = socketio.Server(async_mode="eventlet")
+usernames = {}
+user_colors = {}
 
 
-def main():
-    """Run administrative tasks."""
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'yaptyper.settings')
+def generate_random_color():
+    import random
+
+    return "#{:06x}".format(random.randint(0, 0xFFFFFF))
+
+
+@sio.event
+def connect(sid, environ):
+    print("connect ", sid)
+
+
+@sio.event
+def disconnect(sid):
+    print("disconnect ", sid)
+    username = usernames.pop(sid, "Unknown user")
+    rooms = sio.rooms(sid)
+    for room in rooms:
+        sio.leave_room(sid, room)
+        sio.emit(
+            "message",
+            {
+                "username": "INFO",
+                "message": f"{username} has left the room.",
+                "color": "#FF0000",
+            },
+            room=room,
+            skip_sid=sid,
+        )
+
+
+@sio.on("join")
+def join(sid, data):
+    room_name = data["room"]
+    username = data["username"]
+    password = data.get("password", "")
+
     try:
-        from django.core.management import execute_from_command_line
-    except ImportError as exc:
-        raise ImportError(
-            "Couldn't import Django. Are you sure it's installed and "
-            "available on your PYTHONPATH environment variable? Did you "
-            "forget to activate a virtual environment?"
-        ) from exc
-    execute_from_command_line(sys.argv)
+        chat = Chat.objects.get(room_name=room_name)
+        if chat.password and not check_password(password, chat.password):
+            sio.emit(
+                "message",
+                {
+                    "username": "INFO",
+                    "message": "Incorrect password.",
+                    "color": "#FF0000",
+                },
+                room=sid,
+            )
+            return
+    except Chat.DoesNotExist:
+        sio.emit(
+            "message",
+            {"username": "INFO", "message": "Room does not exist.", "color": "#FF0000"},
+            room=sid,
+        )
+        return
+
+    usernames[sid] = username
+    user_colors[sid] = generate_random_color()
+
+    previous_messages = chat.get_messages()
+    for message in previous_messages:
+        sio.emit(
+            "message",
+            {
+                "username": message.nick_name,
+                "message": message.text,
+                "color": user_colors.get(sid, "#000000"),
+            },
+            room=sid,
+        )
+
+    sio.enter_room(sid, room_name)
+    sio.emit(
+        "message",
+        {
+            "username": "INFO",
+            "message": f"{username} has entered the room.",
+            "color": user_colors[sid],
+        },
+        room=room_name,
+        skip_sid=sid,
+    )
 
 
-if __name__ == '__main__':
-    main()
+@sio.on("message")
+def message(sid, data):
+    room_name = data["room"]
+    username = usernames.get(sid, "Unknown user")
+    color = user_colors.get(sid, "#000000")
+
+    chat = Chat.objects.get(room_name=room_name)
+    ChatMessage.objects.create(chat=chat, nick_name=username, text=data["message"])
+
+    sio.emit(
+        "message",
+        {"username": username, "message": data["message"], "color": color},
+        room=room_name,
+    )
+
+
+@sio.on("leave")
+def leave(sid, data):
+    room_name = data["room"]
+    username = data["username"]
+    sio.leave_room(sid, room_name)
+    sio.emit(
+        "message",
+        {
+            "username": "INFO",
+            "message": f"{username} has left the room.",
+            "color": "#FF0000",
+        },
+        room=room_name,
+        skip_sid=sid,
+    )
+
+
+django_app = get_wsgi_application()
+app = socketio.WSGIApp(sio, django_app)
+
+if __name__ == "__main__":
+    eventlet.wsgi.server(eventlet.listen(("", 8000)), app)
