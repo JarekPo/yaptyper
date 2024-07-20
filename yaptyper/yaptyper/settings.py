@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import environ
+import mimetypes
 
 env = environ.Env()
 environ.Env.read_env()
@@ -187,3 +188,5 @@ NPM_BIN_PATH = env("NPM_BIN_PATH")
 # def js_mime_type(response):
 #     response["Content-Type"] = "text/javascript"
 #     return response
+
+mimetypes.add_type("text/css", ".css", True)
