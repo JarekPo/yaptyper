@@ -49,12 +49,12 @@ def disconnect(sid):
 
 @sio.on("join")
 def join(sid, data):
-    room_name = data["room"]
+    room_name = data["room"].lower()
     username = data["username"]
     password = data.get("password", "")
 
     try:
-        chat = Chat.objects.get(room_name=room_name)
+        chat = Chat.objects.get(room_name__iexact=room_name)
         if chat.password and not check_password(password, chat.password):
             sio.emit(
                 "message",
@@ -104,11 +104,11 @@ def join(sid, data):
 
 @sio.on("message")
 def message(sid, data):
-    room_name = data["room"]
+    room_name = data["room"].lower()
     username = usernames.get(sid, "Unknown user")
     color = user_colors.get(sid, "#000000")
 
-    chat = Chat.objects.get(room_name=room_name)
+    chat = Chat.objects.get(room_name__iexact=room_name)
     ChatMessage.objects.create(chat=chat, nick_name=username, text=data["message"])
 
     sio.emit(
@@ -120,7 +120,7 @@ def message(sid, data):
 
 @sio.on("leave")
 def leave(sid, data):
-    room_name = data["room"]
+    room_name = data["room"].lower()
     username = data["username"]
     sio.leave_room(sid, room_name)
     sio.emit(

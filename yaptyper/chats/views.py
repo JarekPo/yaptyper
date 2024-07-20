@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
+from django.db import IntegrityError
 from .forms import ChatRoomForm, JoinRoomForm
 from .models import Chat
 
@@ -25,9 +26,14 @@ def create_chatroom(request):
         if form.is_valid():
             chat = form.save(commit=False)
             chat.created_by = request.user
+            chat.room_name = chat.room_name.lower()
             if chat.password:
                 chat.password = make_password(chat.password)
-            chat.save()
+            try:
+                chat.save()
+            except IntegrityError:
+                form.add_error("room_name", "Room name already exists")
+                return render(request, "chats/create_chatroom.html", {"form": form})
             return redirect("chat_room", room_name=chat.room_name)
     else:
         form = ChatRoomForm()
@@ -38,11 +44,11 @@ def join_chatroom(request):
     if request.method == "POST":
         form = JoinRoomForm(request.POST)
         if form.is_valid():
-            room_name = form.cleaned_data["room_name"]
+            room_name = form.cleaned_data["room_name"].lower()
             password = form.cleaned_data["password"]
 
             try:
-                chat = Chat.objects.get(room_name=room_name)
+                chat = Chat.objects.get(room_name__iexact=room_name)
                 if chat.password and not check_password(password, chat.password):
                     form.add_error("password", "Incorrect password")
                 else:
@@ -56,10 +62,12 @@ def join_chatroom(request):
 
 @login_required
 def chat_room(request, room_name):
-    chat = get_object_or_404(Chat, room_name=room_name)
+    chat = get_object_or_404(
+        Chat, room_name__iexact=room_name
+    )  # Case insensitive query
     username = request.user.username
     return render(
-        request, "chats/room.html", {"room_name": room_name, "username": username}
+        request, "chats/room.html", {"room_name": chat.room_name, "username": username}
     )
 
 
