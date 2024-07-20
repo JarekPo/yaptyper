@@ -18,15 +18,6 @@
       "dest": "yaptyper/wsgi.py"
     }
   ],
-  "headers": [
-    {
-      "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "text/css"
-      },
-      "source": "/staticfiles/*"
-    }
-  ],
   "rewrites": [
     {
       "source": "/staticfiles/*",
