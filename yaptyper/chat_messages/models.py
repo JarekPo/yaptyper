@@ -8,5 +8,9 @@ class ChatMessage(models.Model):
     nick_name = models.CharField(max_length=120)
     text = models.TextField()
 
+    def save(self, *args, **kwargs):
+        self.nick_name = self.nick_name.lower()
+        super(ChatMessage, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.chat.room_name}-{self.nick_name}"

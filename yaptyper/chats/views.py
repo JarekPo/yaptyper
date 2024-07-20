@@ -4,18 +4,21 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.db import IntegrityError
 from .forms import ChatRoomForm, JoinRoomForm
 from .models import Chat
+from django.contrib.auth.views import redirect_to_login
 
 
 def index(request, username):
-    return render(request, "chats/index.html", {"username": username})
+    return render(request, "chats/index.html", {"username": username.lower()})
 
 
 @login_required
 def room(request, room_name):
+    if not request.user.is_authenticated:
+        return redirect_to_login(next=request.path)
     return render(
         request,
         "chats/room.html",
-        {"room_name": room_name, "username": request.user.username},
+        {"room_name": room_name, "username": request.user.username.lower()},
     )
 
 
@@ -62,10 +65,10 @@ def join_chatroom(request):
 
 @login_required
 def chat_room(request, room_name):
-    chat = get_object_or_404(
-        Chat, room_name__iexact=room_name
-    )  # Case insensitive query
-    username = request.user.username
+    if not request.user.is_authenticated:
+        return redirect_to_login(next=request.path)
+    chat = get_object_or_404(Chat, room_name__iexact=room_name)
+    username = request.user.username.lower()
     return render(
         request, "chats/room.html", {"room_name": chat.room_name, "username": username}
     )
