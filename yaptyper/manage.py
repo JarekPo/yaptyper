@@ -12,7 +12,7 @@ from django.core.wsgi import get_wsgi_application
 from chats.models import Chat
 from chat_messages.models import ChatMessage
 
-sio = socketio.Server(async_mode="eventlet")
+sio = socketio.Server(async_mode="eventlet", cors_allowed_origins="*")
 usernames = {}
 user_colors = {}
 
@@ -139,4 +139,5 @@ django_app = get_wsgi_application()
 app = socketio.WSGIApp(sio, django_app)
 
 if __name__ == "__main__":
-    eventlet.wsgi.server(eventlet.listen(("", 8000)), app)
+    port = int(os.environ.get("PORT", 8000))
+    eventlet.wsgi.server(eventlet.listen(("", port)), app)
