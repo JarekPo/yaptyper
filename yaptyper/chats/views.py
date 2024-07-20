@@ -7,7 +7,7 @@ from .models import Chat
 
 
 def index(request, username):
-    return render(request, "chats/index.html", {"username": username})
+    return render(request, "chats/index.html", {"username": username.lower()})
 
 
 @login_required
@@ -15,7 +15,7 @@ def room(request, room_name):
     return render(
         request,
         "chats/room.html",
-        {"room_name": room_name, "username": request.user.username},
+        {"room_name": room_name, "username": request.user.username.lower()},
     )
 
 
@@ -62,10 +62,8 @@ def join_chatroom(request):
 
 @login_required
 def chat_room(request, room_name):
-    chat = get_object_or_404(
-        Chat, room_name__iexact=room_name
-    )  # Case insensitive query
-    username = request.user.username
+    chat = get_object_or_404(Chat, room_name__iexact=room_name)
+    username = request.user.username.lower()
     return render(
         request, "chats/room.html", {"room_name": chat.room_name, "username": username}
     )
