@@ -3,9 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const username = window.username;
     const password = window.roomPassword || "";
 
-    const protocol = window.location.protocol === 'https:' ? 'https' : 'http';
-    console.info(window.location.host);
-    const socket = io.connect(`${protocol}://${window.location.host}`, {
+    const socket = io.connect('http://localhost:8000', {
         transports: ['websocket'],
         upgrade: false
     });
