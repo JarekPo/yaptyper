@@ -4,18 +4,20 @@
     <div>
       <a href="{% url 'home' %}" class="flex items-center">
         <img src="{% static 'images/logo.png' %}" alt="Logo" class="h-10 w-14">
-        <span class="ml-2  font-bold text-xl">YapTyper</span>
+        <span class="ml-2  font-bold text-xl" style="text-shadow:1px 1px 2px black">YapTyper</span>
       </a>
     </div>
-    <div class="flex space-x-4 text-black sm:text-sm md:text-lg">
-      <a href="{% url 'home' %}" class="hover:underline font-bold hidden min-[490px]:block">Home</a>
+    <div class="flex space-x-4 text-black sm:text-sm md:text-sm">
+      <a href="{% url 'home' %}" class="hover:underline hover:text-white font-bold hidden min-[490px]:block">Home</a>
       <p class="hidden min-[490px]:block">|</p>
-      <a href="{% url 'my_chats' %}" class="hover:underline font-bold">My Chats</a>
+      <a href="{% url 'my_chats' %}" class="hover:underline hover:text-white font-bold">My Chats</a>
       <p class="hidden min-[420px]:block">|</p>
       <form action="{% url 'logout' %}" method="post">
         {% csrf_token %}
-        <button type="submit" id="logout" class="hover:underline font-bold hidden min-[420px]:block">Log Out</button>
+        <button type="submit" id="logout"
+          class="hover:underline hover:text-white font-bold hidden min-[420px]:block">Log Out</button>
       </form>
     </div>
   </div>
 </nav>
+<div class="bg-orange-400 h-0.5"></div>
