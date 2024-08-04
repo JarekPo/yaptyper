@@ -32,6 +32,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "yaptyper.vercel.app",
     "localhost",
+    env("SERVER"),
 ]
 
 
@@ -182,3 +183,5 @@ INTERNAL_IPS = [
 ]
 
 NPM_BIN_PATH = env("NPM_BIN_PATH")
+
+SERVER = env("SERVER")
