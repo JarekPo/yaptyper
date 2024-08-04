@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
@@ -62,12 +63,12 @@ def join_chatroom(request):
 
 @login_required
 def chat_room(request, room_name):
-    chat = get_object_or_404(
-        Chat, room_name__iexact=room_name
-    )  # Case insensitive query
+    chat = get_object_or_404(Chat, room_name__iexact=room_name)
     username = request.user.username
     return render(
-        request, "chats/room.html", {"room_name": chat.room_name, "username": username}
+        request,
+        "chats/room.html",
+        {"room_name": chat.room_name, "username": username, "SERVER": settings.SERVER},
     )
 
 
