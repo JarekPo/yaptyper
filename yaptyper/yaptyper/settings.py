@@ -33,7 +33,10 @@ ALLOWED_HOSTS = [
     "yaptyper.vercel.app",
     "localhost",
     env("SERVER"),
+    "yaptyper.ovh",
 ]
+
+CSRF_TRUSTED_ORIGINS = ["https://yaptyper.ovh"]
 
 
 # Application definition
@@ -176,6 +179,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
     "https://yaptyper.vercel.app",
     "https://yaptyper-7xreprclo-jarekp1admins-projects.vercel.app",
+    "https://yaptyper.ovh",
 ]
 
 INTERNAL_IPS = [
