@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const username = window.username;
     const password = window.roomPassword || "";
 
-    const socket = io.connect(`https://${SERVER}:8000/`, {
+    const socket = io.connect(`https://${SERVER}/`, {
         transports: ['websocket'],
         upgrade: false
     });
