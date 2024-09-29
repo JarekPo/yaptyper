@@ -8,6 +8,7 @@ django.setup()
 
 import socketio
 import eventlet
+import random
 from django.core.wsgi import get_wsgi_application
 from chats.models import Chat
 from chat_messages.models import ChatMessage
@@ -18,9 +19,22 @@ user_colors = {}
 
 
 def generate_random_color():
-    import random
+    chat_text_colors = [
+        "#003366",
+        "#990000",
+        "#5B2E91",
+        "#0033CC",
+        "#4B3D28",
+        "#007A7A",
+        "#CC6600",
+        "#FF1493",
+        "#6B8E23",
+        "#2F4F4F",
+        "#4B0082",
+        "#A52A2A",
+    ]
 
-    return "#{:06x}".format(random.randint(0, 0xFFFFFF))
+    return random.choice(chat_text_colors)
 
 
 @sio.event
@@ -39,7 +53,7 @@ def disconnect(sid):
             "message",
             {
                 "username": "INFO",
-                "message": f"{username} has left the room.",
+                "message": f"{username} has left the room.".upper(),
                 "color": "#FF0000",
             },
             room=room,
@@ -84,7 +98,7 @@ def join(sid, data):
             {
                 "username": message.nick_name,
                 "message": message.text,
-                "color": user_colors.get(sid, "#000000"),
+                "color": "#A9A9A9",
             },
             room=sid,
         )
@@ -94,8 +108,8 @@ def join(sid, data):
         "message",
         {
             "username": "INFO",
-            "message": f"{username} has entered the room.",
-            "color": user_colors[sid],
+            "message": f"{username} has entered the room.".upper(),
+            "color": "#005700",
         },
         room=room_name,
         skip_sid=sid,
@@ -127,7 +141,7 @@ def leave(sid, data):
         "message",
         {
             "username": "INFO",
-            "message": f"{username} has left the room.",
+            "message": f"{username} has left the room.".upper(),
             "color": "#FF0000",
         },
         room=room_name,
