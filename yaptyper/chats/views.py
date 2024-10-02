@@ -20,7 +20,7 @@ def room(request, room_name):
     )
 
 
-@login_required
+@login_required(login_url="/login/")
 def create_chatroom(request):
     if request.method == "POST":
         form = ChatRoomForm(request.POST)
@@ -61,7 +61,7 @@ def join_chatroom(request):
     return render(request, "chats/join_chatroom.html", {"form": form})
 
 
-@login_required
+@login_required(login_url="/login/")
 def chat_room(request, room_name):
     chat = get_object_or_404(Chat, room_name__iexact=room_name)
     username = request.user.username
@@ -72,7 +72,7 @@ def chat_room(request, room_name):
     )
 
 
-@login_required
+@login_required(login_url="/login/")
 def my_chats(request):
     chatrooms = Chat.objects.filter(created_by=request.user)
     return render(request, "chats/my_chats.html", {"chatrooms": chatrooms})
