@@ -1,7 +1,9 @@
+from datetime import datetime
 import os
 import django
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
+from django.utils import timezone
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yaptyper.settings")
 django.setup()
@@ -91,6 +93,17 @@ def join(sid, data):
     usernames[sid] = username
     user_colors[sid] = generate_random_color()
 
+    def get_message_color(message):
+        if message.message_time is not None:
+            if message.message_time.date() == datetime.now().date():
+                return "#000000"
+        return "#A9A9A9"
+
+    def get_message_time(message):
+        if message.message_time is not None:
+            return message.message_time.strftime("%Y-%m-%d %H:%M")
+        return None
+
     previous_messages = chat.get_messages()
     for message in previous_messages:
         sio.emit(
@@ -98,7 +111,8 @@ def join(sid, data):
             {
                 "username": message.nick_name,
                 "message": message.text,
-                "color": "#A9A9A9",
+                "color": get_message_color(message),
+                "message_time": get_message_time(message),
             },
             room=sid,
         )
@@ -121,13 +135,24 @@ def message(sid, data):
     room_name = data["room"].lower()
     username = usernames.get(sid, "Unknown user")
     color = user_colors.get(sid, "#000000")
+    message_time = timezone.now()
 
     chat = Chat.objects.get(room_name__iexact=room_name)
-    ChatMessage.objects.create(chat=chat, nick_name=username, text=data["message"])
+    ChatMessage.objects.create(
+        chat=chat,
+        nick_name=username,
+        text=data["message"],
+        message_time=message_time,
+    )
 
     sio.emit(
         "message",
-        {"username": username, "message": data["message"], "color": color},
+        {
+            "username": username,
+            "message": data["message"],
+            "color": color,
+            "message_time": message_time.strftime("%Y-%m-%d %H:%M"),
+        },
         room=room_name,
     )
 
