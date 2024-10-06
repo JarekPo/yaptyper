@@ -8,15 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
         upgrade: false
     });
 
-    const getMessageTime = (dateTime) => {
-        dateTime = new Date(dateTime);
+    const getMessageTime = (dateTimeString) => {
+        dateTime = dateTimeString ? new Date(dateTimeString) : new Date();
         year = dateTime.getFullYear()
         month = dateTime.getMonth() + 1
         day = dateTime.getDate()
         hours = dateTime.getHours() + 1
         minutes = dateTime.getMinutes()
         doubleDigitMinutes = minutes > 9 ? minutes : `0${minutes}`
-        
+
         if (new Date().getDay() === dateTime.getDay()) {
             return `${hours}:${doubleDigitMinutes}`
         }

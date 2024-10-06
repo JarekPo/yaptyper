@@ -8,6 +8,22 @@ document.addEventListener('DOMContentLoaded', () => {
         upgrade: false
     });
 
+    const getMessageTime = (dateTimeString) => {
+        dateTime = dateTimeString ? new Date(dateTimeString) : new Date();
+        year = dateTime.getFullYear()
+        month = dateTime.getMonth() + 1
+        day = dateTime.getDate()
+        hours = dateTime.getHours() + 1
+        minutes = dateTime.getMinutes()
+        doubleDigitMinutes = minutes > 9 ? minutes : `0${minutes}`
+
+        if (new Date().getDay() === dateTime.getDay()) {
+            return `${hours}:${doubleDigitMinutes}`
+        }
+        else
+            return `${year}-${month}-${day}`
+    }
+
     socket.on('connect', () => {
         console.log('Connected to server');
         socket.emit('join', { room: roomName, username: username, password: password });
@@ -18,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const chatLog = document.getElementById('chat-log');
         const newMessage = document.createElement("p");
         newMessage.style.color = data.color;
-        newMessage.textContent = `${data.username}: ${data.message}`;
+        newMessage.textContent = `[${getMessageTime(data.message_time)}] ${data.username}: ${data.message}`;
         chatLog.appendChild(newMessage);
         chatLog.scrollTop = chatLog.scrollHeight;
     });
