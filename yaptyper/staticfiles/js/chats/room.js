@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const username = window.username;
     const password = window.roomPassword || "";
 
-    const socket = io.connect(`https://${SERVER}/`, {
+    const socket = io.connect(`http://${SERVER}:8000/`, {
         transports: ['websocket'],
         upgrade: false
     });
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
         year = dateTime.getFullYear()
         month = dateTime.getMonth() + 1
         day = dateTime.getDate()
-        hours = dateTime.getHours() + 1
+        hours = dateTime.getHours()
         minutes = dateTime.getMinutes()
         doubleDigitMinutes = minutes > 9 ? minutes : `0${minutes}`
 
