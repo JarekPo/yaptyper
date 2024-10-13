@@ -4,6 +4,7 @@ import django
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.utils import timezone
+from chats.users_data import usernames, user_colors
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yaptyper.settings")
 django.setup()
@@ -16,8 +17,6 @@ from chats.models import Chat
 from chat_messages.models import ChatMessage
 
 sio = socketio.Server(async_mode="eventlet", cors_allowed_origins="*")
-usernames = {}
-user_colors = {}
 
 
 def generate_random_color():

@@ -8,4 +8,5 @@ urlpatterns = [
     path("join/", views.join_chatroom, name="join_chatroom"),
     path("my_chats/", views.my_chats, name="my_chats"),
     path("<str:room_name>/", views.chat_room, name="chat_room"),
+    path("api/usernames/", views.get_usernames, name="get_usernames"),
 ]
