@@ -1,10 +1,12 @@
 from django.conf import settings
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import check_password, make_password
 from django.db import IntegrityError
 from .forms import ChatRoomForm, JoinRoomForm
 from .models import Chat
+from .users_data import usernames, user_rooms
 
 
 def index(request, username):
@@ -76,3 +78,11 @@ def chat_room(request, room_name):
 def my_chats(request):
     chatrooms = Chat.objects.filter(created_by=request.user)
     return render(request, "chats/my_chats.html", {"chatrooms": chatrooms})
+
+
+def get_usernames(request):
+    return JsonResponse(usernames)
+
+
+def get_user_rooms(request):
+    return JsonResponse(user_rooms)

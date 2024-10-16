@@ -4,6 +4,7 @@ import django
 from django.conf import settings
 from django.contrib.auth.hashers import check_password
 from django.utils import timezone
+from chats.users_data import usernames, user_colors, user_rooms
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "yaptyper.settings")
 django.setup()
@@ -16,8 +17,6 @@ from chats.models import Chat
 from chat_messages.models import ChatMessage
 
 sio = socketio.Server(async_mode="eventlet", cors_allowed_origins="*")
-usernames = {}
-user_colors = {}
 
 
 def generate_random_color():
@@ -49,13 +48,14 @@ def disconnect(sid):
     print("disconnect ", sid)
     username = usernames.pop(sid, "Unknown user")
     rooms = sio.rooms(sid)
+    user_rooms.pop(username, None)
     for room in rooms:
         sio.leave_room(sid, room)
         sio.emit(
             "message",
             {
                 "username": "INFO",
-                "message": f"{username} has left the room.".upper(),
+                "message": f"{username} has left the room.",
                 "color": "#FF0000",
             },
             room=room,
@@ -92,6 +92,7 @@ def join(sid, data):
 
     usernames[sid] = username
     user_colors[sid] = generate_random_color()
+    user_rooms[username] = room_name
 
     def get_message_color(message):
         if message.message_time is not None:
@@ -122,7 +123,7 @@ def join(sid, data):
         "message",
         {
             "username": "INFO",
-            "message": f"{username} has entered the room.".upper(),
+            "message": f"{username} has entered the room.",
             "color": "#005700",
         },
         room=room_name,
@@ -162,11 +163,12 @@ def leave(sid, data):
     room_name = data["room"].lower()
     username = data["username"]
     sio.leave_room(sid, room_name)
+    user_rooms.pop(username, None)
     sio.emit(
         "message",
         {
             "username": "INFO",
-            "message": f"{username} has left the room.".upper(),
+            "message": f"{username} has left the room.",
             "color": "#FF0000",
         },
         room=room_name,

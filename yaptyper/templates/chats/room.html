@@ -17,6 +17,7 @@
 
 {% block content %}
 <section class="flex flex-col content-center items-center justify-center h-screen">
+  <span id="users-display" class="text-gray-500">{{ users }}</span>
   <div>Chat Name: <span id="chat-name-display" class="text-orange-500 font-bold uppercase">{{ room_name }}</span></div>
   <div id="chat-log" class='text-gray-700 bg-white resize-none break-normal mt-2'
     style="width: 22rem; height: 22rem; overflow-y: auto; border: 1px solid #ccc; padding: 1rem;"></div>
