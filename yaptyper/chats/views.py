@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import check_password, make_password
 from django.db import IntegrityError
 from .forms import ChatRoomForm, JoinRoomForm
 from .models import Chat
-from .users_data import usernames
+from .users_data import usernames, user_rooms
 
 
 def index(request, username):
@@ -82,3 +82,7 @@ def my_chats(request):
 
 def get_usernames(request):
     return JsonResponse(usernames)
+
+
+def get_user_rooms(request):
+    return JsonResponse(user_rooms)

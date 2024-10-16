@@ -24,8 +24,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${year}-${month}-${day}`
     }
 
+    const getUsersForRoom = (usersRooms, targetRoom) => {
+        const usersInRoom = Object.entries(usersRooms)
+          .filter(([user, room]) => room === targetRoom)
+          .map(([user, room]) => user);
+        return usersInRoom;
+      }
+
     const getActiveUsers = () => {
-        fetch('/chats/api/usernames/')
+        fetch('/chats/api/user_rooms')
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -35,14 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             const userList = document.getElementById('users-display');
             userList.innerHTML = '';
-            uniqueUsernames = new Set(Object.values(data));
+            const usersForCurrentRoom = getUsersForRoom(data, roomName);
+            uniqueUsernames = new Set(usersForCurrentRoom);
             const userArray = Array.from(uniqueUsernames);
             const paragraph = document.createElement('p');
             paragraph.textContent = `[${userArray.join(', ')}]`;
             userList.appendChild(paragraph);
         })
-        .catch(error => console.error('Error fetching usernames:', error));
-    }
+        .catch(error => console.error('Error fetching user_rooms:', error));
+            }
 
     socket.on('connect', () => {
         console.log('Connected to server');
@@ -87,5 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('leave-room').onclick = () => {
         socket.emit('leave', { room: roomName, username: username });
+        getActiveUsers();
     };
 });
