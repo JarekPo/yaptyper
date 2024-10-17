@@ -4,7 +4,7 @@ on:
       - main
 
 jobs:
-  bump_version:
+  increase_version:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -16,14 +16,14 @@ jobs:
           python-version: "3.10"
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: pip install -r yaptyper/requirements.txt
 
       - name: Increase app version
         run: python app_version_increase.py
 
-      - name: Commit version bump
+      - name: Commit version increase
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -am "Bump version to $NEW_VERSION"
+          git commit -am "Increase version to $NEW_VERSION"
           git push
