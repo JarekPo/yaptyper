@@ -1,8 +1,13 @@
+import os
+import sys
 from django.shortcuts import render
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
+from app_version import __version__
 
 
 class LoginView(auth_views.LoginView):
@@ -20,4 +25,4 @@ class RegisterView(generic.CreateView):
 
 
 def home(request):
-    return render(request, "home.html")
+    return render(request, "home.html", {"version": __version__})
