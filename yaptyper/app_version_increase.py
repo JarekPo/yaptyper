@@ -16,7 +16,7 @@ def increase_version(version, part):
 
 
 def main():
-    version_file = "./app_version.py"
+    version_file = "./yaptyper/app_version.py"
     with open(version_file, "r") as f:
         content = f.read()
 

@@ -1,3 +1,5 @@
+name: Increase Version
+
 on:
   push:
     branches:
@@ -19,11 +21,11 @@ jobs:
         run: pip install -r yaptyper/requirements.txt
 
       - name: Increase app version
-        run: python app_version_increase.py
+        run: python yaptyper/app_version_increase.py
 
       - name: Commit version increase
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -am "Increase version to $NEW_VERSION"
+          git commit -am "Increase app version"
           git push
