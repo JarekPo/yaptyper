@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     "theme",
     # "django_browser_reload",
     "whitenoise.runserver_nostatic",
+    "analytical",
 ]
 
 MIDDLEWARE = [
@@ -84,6 +85,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "yaptyper.context_processor.google_analytics",
             ],
         },
     },
@@ -189,3 +191,6 @@ INTERNAL_IPS = [
 NPM_BIN_PATH = env("NPM_BIN_PATH")
 
 SERVER = env("SERVER")
+
+GA4_MEASUREMENT_ID = env("GA4_MEASUREMENT_ID")
+GA4_STREAM_ID = env("GA4_STREAM_ID")
