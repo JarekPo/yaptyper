@@ -9,8 +9,8 @@ from .models import Chat
 from .users_data import usernames, user_rooms
 
 
-def index(request, username):
-    return render(request, "chats/index.html", {"username": username})
+def index(request):
+    return render(request, "chats/index.html")
 
 
 @login_required
