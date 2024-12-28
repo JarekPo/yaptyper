@@ -2,6 +2,8 @@ from urllib import request
 from django.test import Client, TestCase
 from django.contrib.auth.models import User
 from django.urls import reverse
+
+from .forms import ChatRoomForm, JoinRoomForm
 from .models import Chat
 
 class ChatModelTest(TestCase):
@@ -100,3 +102,32 @@ class ViewsTestCase(TestCase):
         response = self.client.get(reverse('get_user_rooms'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
+
+class FormTest(TestCase):
+    def test_chatroom_form(self):
+        """
+        Test if the ChatRoomForm is valid with correct data.
+        """
+        form = ChatRoomForm(data={'room_name': 'testroom', 'password': 'roompass'})
+        self.assertTrue(form.is_valid())
+
+    def test_chatroom_form_invalid(self):
+        """
+        Test if the ChatRoomForm is invalid with incorrect data.
+        """
+        form = ChatRoomForm(data={'room_name': '', 'password': 'roompass'})
+        self.assertFalse(form.is_valid())
+
+    def join_room_form(self):
+        """
+        Test if the JoinRoomForm is valid with correct data.
+        """
+        form = JoinRoomForm(data={'room_name': 'testroom', 'password': 'roompass'})
+        self.assertTrue(form.is_valid())
+
+    def join_room_form_invalid(self):
+        """
+        Test if the JoinRoomForm is invalid with incorrect data.
+        """
+        form = JoinRoomForm(data={'room_name': '', 'password': 'roompass'})
+        self.assertFalse(form.is_valid())
