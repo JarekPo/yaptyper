@@ -163,3 +163,21 @@ class URLTests(TestCase):
     def test_get_user_rooms_url(self):
         response = self.client.get(reverse('get_user_rooms'))
         self.assertEqual(response.status_code, 200)
+
+
+class APIViewsTestCase(TestCase):
+    """
+    Test API views.
+    """
+    def setUp(self):
+        self.client = Client()
+
+    def test_get_usernames(self):
+        response = self.client.get(reverse('get_usernames'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/json')
+
+    def test_get_user_rooms(self):
+        response = self.client.get(reverse('get_user_rooms'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Type'], 'application/json')
