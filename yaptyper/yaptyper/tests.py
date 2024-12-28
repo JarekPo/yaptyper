@@ -68,3 +68,18 @@ class ViewsTestCase(TestCase):
         response = self.client.post(reverse('logout'))
         self.assertEqual(response.status_code, 302)
         self.assertFalse('_auth_user_id' in self.client.session)
+
+
+class URLTests(TestCase):
+    def test_urls(self):
+        """
+        Test if all URLs are accessible.
+        """
+        urls = [
+            reverse('login'),
+            reverse('register'),
+            reverse('home'),
+        ]
+        for url in urls:
+            response = self.client.get(url)
+            self.assertEqual(response.status_code, 200)

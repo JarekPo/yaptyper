@@ -131,3 +131,35 @@ class FormTest(TestCase):
         """
         form = JoinRoomForm(data={'room_name': '', 'password': 'roompass'})
         self.assertFalse(form.is_valid())
+
+class URLTests(TestCase):
+    """
+    Test if all URLs are accessible.
+    """
+    def test_index_url(self):
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_chatroom_url(self):
+        response = self.client.get(reverse('create_chatroom'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_join_chatroom_url(self):
+        response = self.client.get(reverse('join_chatroom'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_my_chats_url(self):
+        response = self.client.get(reverse('my_chats'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_chat_room_url(self):
+        response = self.client.get(reverse('chat_room', args=['testroom']))
+        self.assertEqual(response.status_code, 302)
+
+    def test_get_usernames_url(self):
+        response = self.client.get(reverse('get_usernames'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_get_user_rooms_url(self):
+        response = self.client.get(reverse('get_user_rooms'))
+        self.assertEqual(response.status_code, 200)
