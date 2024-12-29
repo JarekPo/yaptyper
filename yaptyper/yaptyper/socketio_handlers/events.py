@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import check_password
 from chats.models import Chat
 from chat_messages.models import ChatMessage
 from django.utils import timezone
-from .utils import generate_random_color
+from .utils import generate_random_color, get_message_color, get_message_time
 from chats.users_data import usernames, user_colors, user_rooms
 
 import socketio
@@ -67,18 +67,6 @@ def join(sid, data):
     usernames[sid] = username
     user_colors[sid] = generate_random_color()
     user_rooms[username] = room_name
-
-    def get_message_color(message):
-        if message.message_time is not None:
-            if message.message_time.date() == datetime.now().date():
-                return "#000000"
-        return "#A9A9A9"
-
-    def get_message_time(message):
-        if message.message_time is not None:
-            return message.message_time.strftime("%Y-%m-%d %H:%M")
-        return None
-
     previous_messages = chat.get_messages()
     for message in previous_messages:
         sio.emit(
