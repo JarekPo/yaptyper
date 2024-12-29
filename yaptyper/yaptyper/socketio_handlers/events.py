@@ -1,5 +1,3 @@
-# import socketio
-from datetime import datetime
 from django.contrib.auth.hashers import check_password
 from chats.models import Chat
 from chat_messages.models import ChatMessage

@@ -1,7 +1,10 @@
-from django.test import TestCase, Client
+from unittest.mock import Mock
+from django.utils import timezone
+from django.test import SimpleTestCase, TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from app_version import __version__
+from .socketio_handlers.utils import generate_random_color, get_message_color, get_message_time
 
 class ViewsTestCase(TestCase):
     def setUp(self):
@@ -83,3 +86,51 @@ class URLTests(TestCase):
         for url in urls:
             response = self.client.get(url)
             self.assertEqual(response.status_code, 200)
+
+class CustomFunctionsTests(SimpleTestCase):
+    def test_generate_random_color(self):
+        """
+        Test random text color picker.
+        """
+        chat_text_colors = [
+        "#003366",
+        "#990000",
+        "#5B2E91",
+        "#0033CC",
+        "#4B3D28",
+        "#007A7A",
+        "#CC6600",
+        "#FF1493",
+        "#6B8E23",
+        "#2F4F4F",
+        "#4B0082",
+        "#A52A2A",
+    ]
+        self.assertIn(generate_random_color(), chat_text_colors)
+
+
+    def test_get_message_time(self):
+        """
+        Test get message time.
+        """
+        mock_message = Mock()
+        mock_message.message_time = timezone.now()
+        empty_message = Mock()
+        empty_message.message_time = None
+
+        self.assertEqual(get_message_time(mock_message), mock_message.message_time.strftime("%Y-%m-%d %H:%M"))
+        self.assertEqual(get_message_time(empty_message), None)
+
+
+    def test_get_message_color(self):
+        """
+        Test get message color.
+        """
+        mock_message = Mock()
+        mock_message.message_time = timezone.now()
+
+        old_message = Mock()
+        old_message.message_time = timezone.now() - timezone.timedelta(days=1)
+
+        self.assertEqual(get_message_color(mock_message), "#000000")
+        self.assertEqual(get_message_color(old_message), "#A9A9A9")
