@@ -1,4 +1,6 @@
 import random
+from datetime import datetime
+
 
 def generate_random_color():
     chat_text_colors = [
@@ -16,3 +18,14 @@ def generate_random_color():
         "#A52A2A",
     ]
     return random.choice(chat_text_colors)
+
+def get_message_color(message):
+    if message.message_time is not None:
+        if message.message_time.date() == datetime.now().date():
+            return "#000000"
+    return "#A9A9A9"
+
+def get_message_time(message):
+    if message.message_time is not None:
+        return message.message_time.strftime("%Y-%m-%d %H:%M")
+    return None
