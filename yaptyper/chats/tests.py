@@ -181,3 +181,43 @@ class APIViewsTestCase(TestCase):
         response = self.client.get(reverse('get_user_rooms'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response['Content-Type'], 'application/json')
+
+
+class TestTemplates(TestCase):
+    """
+    Test if all templates are rendered correctly.
+    """
+    def setUp(self):
+        self.user = User.objects.create_user(username='test_user', password='pass123')
+        self.client = Client()
+        self.client.login(username='test_user', password='pass123')
+        self.chat = Chat.objects.create(room_name="Test_Room", created_by=self.user)
+
+    def test_index_template(self):
+        response = self.client.get(reverse('index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'chats/index.html')
+
+    def test_create_chatroom_template(self):
+        response = self.client.get(reverse('create_chatroom'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'chats/create_chatroom.html')
+
+    def test_join_chatroom_template(self):
+        response = self.client.get(reverse('join_chatroom'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'chats/join_chatroom.html')
+
+    def test_my_chats_template(self):
+        response = self.client.get(reverse('my_chats'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'chats/my_chats.html')
+
+    def test_chat_room_template(self):
+        response = self.client.get(reverse('chat_room', args=['Test_Room']))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'chats/room.html')
+
+    def test_chat_room_template_invalid(self):
+        response = self.client.get(reverse('chat_room', args=['Invalid_Room']))
+        self.assertEqual(response.status_code, 404)
