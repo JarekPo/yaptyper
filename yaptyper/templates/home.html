@@ -39,6 +39,13 @@
       class="text-xl bg-orange-600 hover:bg-orange-400 my-8 py-2 px-4 border border-white rounded">Login</a>
     <a href="{% url 'register' %}"
       class="text-xl bg-orange-600 hover:bg-orange-400 my-8 py-2 px-4 border border-white rounded">Register</a>
+      <span>or</span>
+      <a
+        href="{% url 'guest' %}" 
+        class="text-xl text-orange-400 hover:text-orange-600 hover:underline my-8"
+        >
+        Enter as a Guest
+      </a>
   </div>
   {% endif %}
 </div>
