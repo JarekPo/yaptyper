@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+<title>YapTyper - Enter as a Guest</title>
+{% endblock %} 
+{% block scripts %}
+<script src="{% static 'js/chats/guest_login.js' %}"></script>
+{% endblock %} 
+{% block content %}
+<section class="flex flex-col content-center items-center text-gray-700 justify-center h-screen">
+  <form
+    method="post"
+    class="bg-white shadow-md rounded max-w-64 px-8 pt-6 pb-8 mb-4 flex flex-col content-start items-start justify-start"
+  >
+    {% csrf_token %}
+    <h2 class="block text-gray-700 text-lg font-bold mb-4">Enter as a Guest</h2>
+    <div class="mb-4">
+      <label class="block text-gray-700 text-sm font-bold mb-2" for="guest_name">
+        Name:
+      </label>
+      <input
+        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        id="guest_name"
+        name="guest_name"
+        type="text"
+        required
+      />
+    </div>
+    <input type="hidden" name="username" id="username" />
+    <input type="hidden" name="password" value="default_guest_password" />
+    <button
+      type="submit"
+      class="text-lg bg-orange-600 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+      onclick="setGuestUsername()"
+    >
+      Enter
+    </button>
+    <div class="flex space-x-4">
+    <a
+        href="{% url 'register' %}"
+        class="text-xs text-white font-bold bg-gray-500 hover:bg-orange-400 mt-20 py-1 px-4 border border-white rounded"
+    >
+        Register
+    </a>
+    <a 
+        href="{% url 'home' %}" 
+        class="text-xs text-white font-bold bg-gray-500 hover:bg-orange-400 mt-20 py-1 px-4 border border-white rounded"
+    >
+        Back
+    </a>
+    </div>
+  </form>
+</section>
+{% endblock %}
