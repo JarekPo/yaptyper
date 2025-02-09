@@ -42,10 +42,12 @@ class GuestLoginView(View):
         user, created = User.objects.get_or_create(username=username)
         if created:
             user.set_password(password)
+            user.isGuest = True
             user.save()
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
+            request.session["isGuest"] = True
             return redirect("home")
 
         return render(request, self.template_name, {"error": "Unable to log in as guest"})
