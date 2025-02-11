@@ -9,14 +9,19 @@
     </div>
     <div class="flex space-x-4 text-black sm:text-sm md:text-sm">
       <a href="{% url 'home' %}" class="hover:underline hover:text-white font-bold hidden min-[490px]:block">Home</a>
+      {% if user.is_authenticated and not request.session.isGuest %}
+        <p class="hidden min-[490px]:block">|</p>
+        <a href="{% url 'my_chats' %}" class="hover:underline hover:text-white font-bold">My Chats</a>
+        <p class="hidden min-[420px]:block">|</p>
+        <form action="{% url 'logout' %}" method="post">
+          {% csrf_token %}
+          <button type="submit" id="logout"
+            class="hover:underline hover:text-white font-bold hidden min-[420px]:block">Log Out</button>
+        </form>
+      {% else %}
       <p class="hidden min-[490px]:block">|</p>
-      <a href="{% url 'my_chats' %}" class="hover:underline hover:text-white font-bold">My Chats</a>
-      <p class="hidden min-[420px]:block">|</p>
-      <form action="{% url 'logout' %}" method="post">
-        {% csrf_token %}
-        <button type="submit" id="logout"
-          class="hover:underline hover:text-white font-bold hidden min-[420px]:block">Log Out</button>
-      </form>
+        <a href="{% url 'login' %}" class="hover:underline hover:text-white font-bold">Login</a>
+      {% endif %}
     </div>
   </div>
 </nav>
