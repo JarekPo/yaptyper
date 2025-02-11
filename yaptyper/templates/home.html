@@ -32,7 +32,13 @@
       {% csrf_token %}
       <button type="submit" id="logout"
         class="text-xs text-white bg-gray-500 hover:bg-orange-400 mt-14 py-1 px-4 border border-white rounded"
-        style="overscroll-behavior: contain">Log Out</button>
+        style="overscroll-behavior: contain">
+        {% if not request.session.isGuest %}
+          Log Out
+        {% else %}
+          Exit
+        {% endif %}
+      </button>
     </form>
   </div>
   {% else %}
