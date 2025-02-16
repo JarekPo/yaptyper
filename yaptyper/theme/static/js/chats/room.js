@@ -9,15 +9,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const getMessageTime = (dateTimeString) => {
-        dateTime = dateTimeString === undefined ? new Date() : new Date(dateTimeString);
-        year = dateTime.getFullYear()
-        month = dateTime.getMonth() + 1
-        day = dateTime.getDate()
-        hours = dateTime.getHours()
-        minutes = dateTime.getMinutes()
-        doubleDigitMinutes = minutes > 9 ? minutes : `0${minutes}`
+        const dateTime = dateTimeString === undefined ? new Date() : new Date(dateTimeString);
+        const year = dateTime.getFullYear()
+        const month = dateTime.getMonth() + 1
+        const day = dateTime.getDate()
+        const hours = dateTime.getHours()
+        const minutes = dateTime.getMinutes()
+        const doubleDigitMinutes = minutes > 9 ? minutes : `0${minutes}`
+        const today = new Date()
 
-        if (new Date().getDay() === dateTime.getDay()) {
+        if (dateTime.toDateString() === today.toDateString()) {
             return `${hours}:${doubleDigitMinutes}`
         }
         else
