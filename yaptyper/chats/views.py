@@ -76,6 +76,8 @@ def chat_room(request, room_name):
 
 @login_required(login_url="/login/")
 def my_chats(request):
+    if request.session.get("isGuest"):
+        return redirect("login")
     chatrooms = Chat.objects.filter(created_by=request.user)
     return render(request, "chats/my_chats.html", {"chatrooms": chatrooms})
 
