@@ -9,6 +9,9 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
   {% block scripts %} {% endblock %}
+  {% if canonical_url %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  {% endif %}
   <link rel="stylesheet" href="{% static 'css/dist/styles.css' %}" type='text/css'>
   <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ GA4_MEASUREMENT_ID }}"></script>
