@@ -34,6 +34,8 @@ ALLOWED_HOSTS = [
     "localhost",
     env("SERVER"),
     "yaptyper.ovh",
+    "127.0.0.1",
+    "www.yaptyper.ovh",
 ]
 
 CSRF_TRUSTED_ORIGINS = ["https://yaptyper.ovh"]
